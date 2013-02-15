@@ -1,0 +1,5 @@
+#!/bin/sh
+# /usr/bin/cancer_wm-session
+xsetroot -solid "#111111"
+xrdb -load $HOME/.Xdefaults
+exec /usr/bin/cancer_wm

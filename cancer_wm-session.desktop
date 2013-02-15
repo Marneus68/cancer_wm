@@ -1,0 +1,12 @@
+# /usr/share/xsessions/cancer_wm-session.desktop
+[Desktop Entry]
+Encoding=UTF-8
+Name=Cancer Session
+Comment=Cancerous Window Manager
+Exec=cancer_wm-session
+Terminal=False
+TryExec=cancer_wm
+Type=Application
+
+[Window Manager]
+SessionManaged=true
