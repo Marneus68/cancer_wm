@@ -11,7 +11,6 @@
 
 typedef enum
 {
-    NONE = 0,
     RAISE,
     LOWER,
     DESTROY,
