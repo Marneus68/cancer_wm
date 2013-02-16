@@ -17,7 +17,7 @@ support too, even for tilling actions.
 
 Compiling
 ---------
-Compiling cancer wm requires Xlib.
+Compiling cancer wm requires __Xlib__.
 
     make
 
@@ -29,12 +29,18 @@ Installing requires __root privileges__.
 
 Usage
 -----
-Installing cancer wm will put the executable in /usr/bin/cancer_wm with a startup script /usr/bin/cancer_wm-session. A cancer_wm-session.desktop will be created.
-Depending on the display manager you use, the cancer_wm session will be dirrectly available, or will need to be added to the list of available sessiosn for you display manager.
+Installing cancer wm will copy the executable __cancer_wm__ to */usr/bin/cancer_wm*
+with a startup script */usr/bin/cancer_wm-session*. A *cancer_wm-session.desktop*
+will also be copied.
+Depending on the display manager you use, the cancer_wm session will be dirrectly
+available, or will need to be added to the list of available sessions for 
+your display manager.
 
-Remember that, at the moment the cancer_wm session doesn't provide any kind of shell to lauch applications.
+Remember that, at the moment the cancer_wm session doesn't provide any kind 
+of shell to lauch applications.
 
-To test the behaviour of cancer_wm, you can open up an existing tty (ctrl + alt + F1, for exeample), log in and type in the following line :
+To test the behaviour of cancer_wm, you can open up an existing tty (ctrl + alt +
+F1, for exeample), log in and type in the following line :
 
     export DISPLAY=:0
 
@@ -42,7 +48,8 @@ After that, you can invoke graphical programes such as xterm :
 
     xterm &
 
-You can then switch back to the graphical window (ctrl + alt + F7) to try out cancer_wm.
+You can then switch back to the graphical window (ctrl + alt + F7) to try out 
+cancer_wm.
 
 Key Bidings
 -----------
@@ -88,7 +95,7 @@ Ctrl + Mod1 + j + h: Snap to the bottom left slot
 
 Uninstalling
 ------------
-Uninstalling requires root privileges.
+Uninstalling requires __root privileges__.
 
     make uninstall
 
