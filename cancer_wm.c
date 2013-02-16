@@ -32,7 +32,6 @@ int main()
     ca_order    order;
     order.window = NULL;
 
-    /** KEYS **/
     /* put the window on the top */
     GRAB_KEYS(XK_F1, ALT)
 
@@ -46,7 +45,6 @@ int main()
     /* window refreshing (mapping/unmapping) */
     GRAB_KEYS(XK_F5, ALT)
 
-    /* Key bindings for window snapping */
     /* right slot */
     GRAB_KEYS(XK_KP_6, CANCER_MOD)
     GRAB_KEYS(XK_h, CANCER_MOD)
@@ -79,7 +77,6 @@ int main()
     GRAB_KEYS(XK_KP_0, CANCER_MOD)
     GRAB_KEYS(XK_m, CANCER_MOD)
 
-    /** MOUSE BUTTONS **/
     /* move the window arround */
     XGrabButton(dpy, 1, CANCER_MOD, root, True, ButtonPressMask, GrabModeAsync,
             GrabModeAsync, None, None);
@@ -88,7 +85,12 @@ int main()
     XGrabButton(dpy, 3, CANCER_MOD, root, True, ButtonPressMask, GrabModeAsync,
             GrabModeAsync, None, None);
 
-    for(;;) {
+    /* destroy the window */
+    XGrabButton(dpy, 2, CANCER_MOD, root, True, ButtonPressMask, GrabModeAsync,
+            GrabModeAsync, None, None);
+
+    for(;;)
+    {
         XNextEvent(dpy, &ev);
         
         /*** Keypresses on a window ***/
@@ -96,7 +98,6 @@ int main()
         {
             if MODIFIER_IS(ALT)
             {
-                order.window = ev.xkey.subwindow;
                 if KEY_IS(XK_F1)
                     order.act = RAISE;
                 else if KEY_IS(XK_F2)
@@ -109,8 +110,7 @@ int main()
             else if MODIFIER_IS(CONTROL)
             {
                 order.window = ev.xkey.subwindow;
-                if KEY_IS(XK_q)
-                    order.act = DESTROY;
+                if KEY_IS(XK_q) order.act = DESTROY;
             }
             else if MODIFIER_IS(CANCER_MOD)
             {
@@ -123,8 +123,7 @@ int main()
                         order.direct = UP_RIGHT;
                     else if (order.direct == DOWN)
                         order.direct = DOWN_RIGHT;
-                    else 
-                        order.direct = RIGHT;
+                    else order.direct = RIGHT;
                 }
                 /* left slot */
                 else if (KEY_IS(XK_KP_4) || KEY_IS(XK_h) || KEY_IS(XK_Left))
@@ -184,7 +183,6 @@ int main()
                 else if (KEY_IS(XK_KP_5) || KEY_IS(XK_u))
                 {
                     order.act = FULLSCREEN;
-                    order.window = ev.xkey.subwindow;
                 }
                 /* free window */
                 else if (KEY_IS(XK_KP_0) || KEY_IS(XK_m));
@@ -209,15 +207,13 @@ int main()
                 XUnmapWindow(dpy, order.window);
                 XMapWindow(dpy, order.window);
             }
-            else if (order.act == FULLSCREEN)
-            {
-                XMoveResizeWindow(dpy, order.window, 0, 0,
-                        rw_w, rw_h);
-            }
             else if (order.act == SNAP)
             {
-               switch (order.direct)
+                switch (order.direct)
                 {
+                    case FULLSCREEN:
+                        XMoveResizeWindow(dpy, order.window, 0, 0,
+                                rw_w, rw_h);
                     case UP:
                         XMoveResizeWindow(dpy, ev.xkey.subwindow, 0, 0,
                                 rw_w, rw_h/2);
@@ -250,9 +246,12 @@ int main()
                         XMoveResizeWindow(dpy, ev.xkey.subwindow, rw_w/2, rw_h/2,
                                 rw_w/2, rw_h/2);
                         break;
+                    default:
+                        order.direct = 0;
+                        break;
                 }
+                order.direct = 0;
             }
-            else toclean = 1;
             
             if (toclean)
             {
@@ -285,13 +284,16 @@ int main()
             xdiff = ev.xbutton.x_root - start.x_root;
             ydiff = ev.xbutton.y_root - start.y_root;
             XMoveResizeWindow(dpy, ev.xmotion.window,
-                attr.x + (start.button==1 ? xdiff : 0),
-                attr.y + (start.button==1 ? ydiff : 0),
-                MAX(1, attr.width + (start.button==3 ? xdiff : 0)),
-                MAX(1, attr.height + (start.button==3 ? ydiff : 0)));
+                    attr.x + (start.button==1 ? xdiff : 0),
+                    attr.y + (start.button==1 ? ydiff : 0),
+                    MAX(1, attr.width + (start.button==3 ? xdiff : 0)),
+                    MAX(1, attr.height + (start.button==3 ? ydiff : 0)));
         }
         else if(ev.type == ButtonRelease)
-            XUngrabPointer(dpy, CurrentTime);
+        {
+            if (ev.xbutton.state == Button1Mask || Button3Mask)
+                XUngrabPointer(dpy, CurrentTime);
+        }
     }
 }
 

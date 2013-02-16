@@ -11,16 +11,18 @@
 
 typedef enum
 {
+    NONE = 0,
     RAISE,
     LOWER,
     DESTROY,
     REFRESH,
-    SNAP, /* aw snap ! */
+    SNAP, 
     FREE
 } ca_action;
 
 typedef enum 
 {
+    NONE = 0,
     UP,
     UP_RIGHT,
     UP_LEFT,
