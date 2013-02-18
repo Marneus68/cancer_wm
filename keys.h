@@ -14,8 +14,6 @@
 /* grabbing macros */
 #define GRAB_KEYS(KEY, MOD) XGrabKey(dpy, XKeysymToKeycode(dpy, KEY), MOD,\
         root, True, GrabModeAsync, GrabModeAsync);
-#define GRAB_KEY(KEY) XGrabKey(dpy, XKeysymToKeycode(dpy, KEY), 0, root,\
-        True, GrabModeAsync, GrabModeAsync);
 /* state checking */
 #define MODIFIER_IS(MOD) (ev.xkey.state == MOD)
 #define KEY_IS(KEY) (ev.xkey.keycode == XKeysymToKeycode(dpy, KEY)) 

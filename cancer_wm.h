@@ -11,6 +11,7 @@
 
 typedef enum
 {
+    NONE = 0,
     RAISE,
     LOWER,
     DESTROY,
@@ -21,7 +22,7 @@ typedef enum
 
 typedef enum 
 {
-    NONE = 0,
+    _ = 0,
     UP,
     UP_RIGHT,
     UP_LEFT,
@@ -35,6 +36,7 @@ typedef enum
 
 typedef enum
 {
+    __ = 0,
     TERMINAL,
     LOCK,
     SHUTDOWN

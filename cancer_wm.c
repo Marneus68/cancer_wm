@@ -96,6 +96,7 @@ int main()
         /*** Keypresses on a window ***/
         if(ev.type == KeyPress && ev.xkey.subwindow != None)
         {
+            order.window = ev.xkey.subwindow;
             if MODIFIER_IS(ALT)
             {
                 if KEY_IS(XK_F1)
@@ -109,12 +110,10 @@ int main()
             }
             else if MODIFIER_IS(CONTROL)
             {
-                order.window = ev.xkey.subwindow;
                 if KEY_IS(XK_q) order.act = DESTROY;
             }
             else if MODIFIER_IS(CANCER_MOD)
             {
-                XRaiseWindow(dpy, ev.xkey.subwindow);
                 /* right slot */
                 if (KEY_IS(XK_KP_6) || KEY_IS(XK_l) || KEY_IS(XK_Right))
                 {
@@ -182,7 +181,8 @@ int main()
                 /* fullscreen */
                 else if (KEY_IS(XK_KP_5) || KEY_IS(XK_u))
                 {
-                    order.act = FULLSCREEN;
+                    order.act = SNAP;
+                    order.direct = FULLSCREEN;
                 }
                 /* free window */
                 else if (KEY_IS(XK_KP_0) || KEY_IS(XK_m));
@@ -209,48 +209,46 @@ int main()
             }
             else if (order.act == SNAP)
             {
+                XRaiseWindow(dpy, ev.xbutton.subwindow);
                 switch (order.direct)
                 {
                     case FULLSCREEN:
                         XMoveResizeWindow(dpy, order.window, 0, 0,
-                                rw_w, rw_h);
+                            rw_w, rw_h);
+                        break;
                     case UP:
-                        XMoveResizeWindow(dpy, ev.xkey.subwindow, 0, 0,
+                        XMoveResizeWindow(dpy, order.window, 0, 0,
                                 rw_w, rw_h/2);
                         break;
                     case DOWN:
-                        XMoveResizeWindow(dpy, ev.xkey.subwindow, 0, rw_h/2,
+                        XMoveResizeWindow(dpy, order.window, 0, rw_h/2,
                                 rw_w, rw_h/2);
                         break;
                     case RIGHT:
-                        XMoveResizeWindow(dpy, ev.xkey.subwindow, rw_w/2, 0,
+                        XMoveResizeWindow(dpy, order.window, rw_w/2, 0,
                                 rw_w/2, rw_h);
                         break;
                     case LEFT:
-                        XMoveResizeWindow(dpy, ev.xkey.subwindow, 0, 0,
+                        XMoveResizeWindow(dpy, order.window, 0, 0,
                                 rw_w/2, rw_h);
                         break;
                     case UP_RIGHT:
-                        XMoveResizeWindow(dpy, ev.xkey.subwindow, rw_w/2, 0,
+                        XMoveResizeWindow(dpy, order.window, rw_w/2, 0,
                                 rw_w/2, rw_h/2);
                         break;
                     case UP_LEFT:
-                        XMoveResizeWindow(dpy, ev.xkey.subwindow, 0, 0,
+                        XMoveResizeWindow(dpy, order.window, 0, 0,
                                 rw_w/2, rw_h/2);
                         break;
                     case DOWN_LEFT:
-                        XMoveResizeWindow(dpy, ev.xkey.subwindow, 0, rw_h/2,
+                        XMoveResizeWindow(dpy, order.window, 0, rw_h/2,
                                 rw_w/2, rw_h/2);
                         break;
                     case DOWN_RIGHT:
-                        XMoveResizeWindow(dpy, ev.xkey.subwindow, rw_w/2, rw_h/2,
+                        XMoveResizeWindow(dpy, order.window, rw_w/2, rw_h/2,
                                 rw_w/2, rw_h/2);
                         break;
-                    default:
-                        order.direct = 0;
-                        break;
                 }
-                order.direct = 0;
             }
             
             if (toclean)
@@ -263,7 +261,7 @@ int main()
         }
         else if (ev.type == ButtonPress && ev.xbutton.subwindow != None) 
         {
-            XRaiseWindow(dpy, ev.xkey.subwindow);
+            XRaiseWindow(dpy, ev.xbutton.subwindow);
             if (ev.xbutton.state == CANCER_MOD)
             {
                 XRaiseWindow(dpy, ev.xkey.subwindow);
