@@ -1,8 +1,8 @@
-PREFIX?=/usr/include/X11
+PREFIX?=/usr/X11R6
 CFLAGS?=-Os -pedantic -Wall
 
 all:
-	$(CC) $(CFLAGS) -lX11 -o cancer_wm cancer_wm.c
+	$(CC) $(CFLAGS) -I$(PREFIX)/include cancer_wm.c -L$(PREFIX)/lib -lX11 -o cancer_wm 
 
 clean:
 	rm -f cancer_wm
