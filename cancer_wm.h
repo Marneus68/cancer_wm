@@ -1,6 +1,8 @@
 #ifndef __CANCER_WM_H__
 #define __CANCER_WM_H__
 
+#include <unistd.h>
+
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <X11/keysymdef.h>
@@ -17,7 +19,9 @@ typedef enum
     DESTROY,
     REFRESH,
     SNAP, 
-    FREE
+    FREE,
+    DEF_TERM,
+    DEF_WWW
 } ca_action;
 
 typedef enum 

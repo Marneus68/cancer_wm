@@ -72,10 +72,13 @@ int main()
     GRAB_KEYS(XK_KP_1, CANCER_MOD)
     /* toggle fullscreen */
     GRAB_KEYS(XK_KP_5, CANCER_MOD)
-    GRAB_KEYS(XK_u, CANCER_MOD)
+    GRAB_KEYS(XK_i, CANCER_MOD)
     /* free (unsnap) window */
     GRAB_KEYS(XK_KP_0, CANCER_MOD)
     GRAB_KEYS(XK_m, CANCER_MOD)
+
+    /* launch the defautl applications */
+    GRAB_KEYS(XK_t, CANCER_MOD)
 
     /* move the window arround */
     XGrabButton(dpy, 1, CANCER_MOD, root, True, ButtonPressMask, GrabModeAsync,
@@ -94,98 +97,111 @@ int main()
         XNextEvent(dpy, &ev);
         
         /*** Keypresses on a window ***/
-        if(ev.type == KeyPress && ev.xkey.subwindow != None)
+        if(ev.type == KeyPress)
         {
-            order.window = ev.xkey.subwindow;
-            if MODIFIER_IS(ALT)
+            if (ev.xkey.subwindow == None)
             {
-                if KEY_IS(XK_F1)
-                    order.act = RAISE;
-                else if KEY_IS(XK_F2)
-                    order.act = LOWER;
-                else if KEY_IS(XK_F4)
-                    order.act = DESTROY;
-                else if KEY_IS(XK_F5)
-                    order.act = REFRESH;
-            }
-            else if MODIFIER_IS(CONTROL)
-            {
-                if KEY_IS(XK_q) order.act = DESTROY;
-            }
-            else if MODIFIER_IS(CANCER_MOD)
-            {
-                /* right slot */
-                if (KEY_IS(XK_KP_6) || KEY_IS(XK_l) || KEY_IS(XK_Right))
+                if MODIFIER_IS(CANCER_MOD)
                 {
-                    order.act = SNAP;
-                    if (order.direct == UP)
+                    if (KEY_IS(XK_t))
+                        order.act = DEF_TERM;
+                }
+            }
+            else if (ev.xkey.subwindow != None)
+            {
+                order.window = ev.xkey.subwindow;
+                if MODIFIER_IS(ALT)
+                {
+                    if KEY_IS(XK_F1)
+                        order.act = RAISE;
+                    else if KEY_IS(XK_F2)
+                        order.act = LOWER;
+                    else if KEY_IS(XK_F4)
+                        order.act = DESTROY;
+                    else if KEY_IS(XK_F5)
+                        order.act = REFRESH;
+                }
+                else if MODIFIER_IS(CONTROL)
+                {
+                    if KEY_IS(XK_q) order.act = DESTROY;
+                }
+                else if MODIFIER_IS(CANCER_MOD)
+                {
+                    if (KEY_IS(XK_t))
+                        order.act = DEF_TERM;
+                    /* right slot */
+                    else if (KEY_IS(XK_KP_6) || KEY_IS(XK_l) || KEY_IS(XK_Right))
+                    {
+                        order.act = SNAP;
+                        if (order.direct == UP)
+                            order.direct = UP_RIGHT;
+                        else if (order.direct == DOWN)
+                            order.direct = DOWN_RIGHT;
+                        else order.direct = RIGHT;
+                    }
+                    /* left slot */
+                    else if (KEY_IS(XK_KP_4) || KEY_IS(XK_h) || KEY_IS(XK_Left))
+                    {
+                        order.act = SNAP;
+                        if (order.direct == UP)
+                            order.direct = UP_LEFT;
+                        else if (order.direct == DOWN)
+                            order.direct = DOWN_LEFT;
+                        else order.direct = LEFT;
+                    }
+                    /* bottom slot */
+                    else if (KEY_IS(XK_KP_2) || KEY_IS(XK_j) || KEY_IS(XK_Down))
+                    {
+                        order.act = SNAP;
+                        if (order.direct == RIGHT)
+                            order.direct = DOWN_RIGHT;
+                        else if (order.direct == LEFT)
+                            order.direct = DOWN_LEFT;
+                        else order.direct = DOWN;
+                    }
+                    /* top slot */
+                    else if (KEY_IS(XK_KP_8) || KEY_IS(XK_k) || KEY_IS(XK_Up))
+                    {
+                        order.act = SNAP;
+                        if (order.direct == RIGHT)
+                            order.direct = DOWN_RIGHT;
+                        else if (order.direct == LEFT)
+                            order.direct = DOWN_LEFT;
+                        else order.direct = UP;
+                    }
+                    /* keypad 9 */
+                    else if KEY_IS(XK_KP_9)
+                    {
+                        order.act = SNAP;
                         order.direct = UP_RIGHT;
-                    else if (order.direct == DOWN)
-                        order.direct = DOWN_RIGHT;
-                    else order.direct = RIGHT;
-                }
-                /* left slot */
-                else if (KEY_IS(XK_KP_4) || KEY_IS(XK_h) || KEY_IS(XK_Left))
-                {
-                    order.act = SNAP;
-                    if (order.direct == UP)
+                    }
+                    /* keypad 7 */
+                    else if KEY_IS(XK_KP_7)
+                    {
+                        order.act = SNAP;
                         order.direct = UP_LEFT;
-                    else if (order.direct == DOWN)
+                    }
+                    /* keypad 1 */
+                    else if KEY_IS(XK_KP_1)
+                    {
+                        order.act = SNAP;
                         order.direct = DOWN_LEFT;
-                    else order.direct = LEFT;
-                }
-                /* bottom slot */
-                else if (KEY_IS(XK_KP_2) || KEY_IS(XK_j) || KEY_IS(XK_Down))
-                {
-                    order.act = SNAP;
-                    if (order.direct == RIGHT)
+                    }
+                    /* keypad 3 */
+                    else if KEY_IS(XK_KP_3)
+                    {
+                        order.act = SNAP;
                         order.direct = DOWN_RIGHT;
-                    else if (order.direct == LEFT)
-                        order.direct = DOWN_LEFT;
-                    else order.direct = DOWN;
+                    }
+                    /* fullscreen */
+                    else if (KEY_IS(XK_KP_5) || KEY_IS(XK_i))
+                    {
+                        order.act = SNAP;
+                        order.direct = FULLSCREEN;
+                    }
+                    /* free window */
+                    else if (KEY_IS(XK_KP_0) || KEY_IS(XK_m));
                 }
-                /* top slot */
-                else if (KEY_IS(XK_KP_8) || KEY_IS(XK_k) || KEY_IS(XK_Up))
-                {
-                    order.act = SNAP;
-                    if (order.direct == RIGHT)
-                        order.direct = DOWN_RIGHT;
-                    else if (order.direct == LEFT)
-                        order.direct = DOWN_LEFT;
-                    else order.direct = UP;
-                }
-                /* keypad 9 */
-                else if KEY_IS(XK_KP_9)
-                {
-                    order.act = SNAP;
-                    order.direct = UP_RIGHT;
-                }
-                /* keypad 7 */
-                else if KEY_IS(XK_KP_7)
-                {
-                    order.act = SNAP;
-                    order.direct = UP_LEFT;
-                }
-                /* keypad 1 */
-                else if KEY_IS(XK_KP_1)
-                {
-                    order.act = SNAP;
-                    order.direct = DOWN_LEFT;
-                }
-                /* keypad 3 */
-                else if KEY_IS(XK_KP_3)
-                {
-                    order.act = SNAP;
-                    order.direct = DOWN_RIGHT;
-                }
-                /* fullscreen */
-                else if (KEY_IS(XK_KP_5) || KEY_IS(XK_u))
-                {
-                    order.act = SNAP;
-                    order.direct = FULLSCREEN;
-                }
-                /* free window */
-                else if (KEY_IS(XK_KP_0) || KEY_IS(XK_m));
             }
         }
         else if (ev.type == KeyRelease)
@@ -207,6 +223,10 @@ int main()
                 XUnmapWindow(dpy, order.window);
                 XMapWindow(dpy, order.window);
             }
+            else if (order.act == DEF_TERM)
+                system("x-terminal-emulator &");
+            else if (order.act == DEF_WWW)
+                system("x-www-browser");
             else if (order.act == SNAP)
             {
                 XRaiseWindow(dpy, ev.xbutton.subwindow);
@@ -261,7 +281,6 @@ int main()
         }
         else if (ev.type == ButtonPress && ev.xbutton.subwindow != None) 
         {
-            XRaiseWindow(dpy, ev.xbutton.subwindow);
             if (ev.xbutton.state == CANCER_MOD)
             {
                 XRaiseWindow(dpy, ev.xkey.subwindow);

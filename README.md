@@ -68,6 +68,8 @@ mentionned are the numbers from the numeric keycapd.
 Ctrl + Mod1 + Mouse Button 1: Move the clicked window around  
 Ctrl + Mod1 + Mouse Button 3: Resize the clicked window  
 
+Ctrl + Mod1 + t: Bring up your default terminal emulator (x-terminal-emulator)
+
 Ctrl + Mod1 + Up:  
 Ctrl + Mod1 + 8:  
 Ctrl + Mod1 + k: Snap to the top slot  
