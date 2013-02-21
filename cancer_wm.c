@@ -3,6 +3,7 @@
  * TinyWM is written by Nick Welch <mack@incise.org>, 2005.
  */
 
+#include "constants.h"
 #include "cancer_wm.h"
 
 int main()
@@ -237,36 +238,37 @@ int main()
                             rw_w, rw_h);
                         break;
                     case UP:
-                        XMoveResizeWindow(dpy, order.window, 0, 0,
-                                rw_w, rw_h/2);
+                        XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
+                        PADDING, rw_w - PADDING * 2, rw_h/2 - PADDING * 2);
                         break;
                     case DOWN:
-                        XMoveResizeWindow(dpy, order.window, 0, rw_h/2,
-                                rw_w, rw_h/2);
+                        XMoveResizeWindow(dpy, order.window, 0 + PADDING, rw_h/2
+                        + PADDING, rw_w - PADDING * 2, rw_h/2 - PADDING * 2);
                         break;
                     case RIGHT:
-                        XMoveResizeWindow(dpy, order.window, rw_w/2, 0,
-                                rw_w/2, rw_h);
+                        XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING, 0
+                        + PADDING, rw_w/2 - PADDING  * 2, rw_h - PADDING * 2);
                         break;
                     case LEFT:
-                        XMoveResizeWindow(dpy, order.window, 0, 0,
-                                rw_w/2, rw_h);
+                        XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
+                        PADDING, rw_w/2 - PADDING * 2, rw_h - PADDING * 2);
                         break;
                     case UP_RIGHT:
-                        XMoveResizeWindow(dpy, order.window, rw_w/2, 0,
-                                rw_w/2, rw_h/2);
+                        XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING, 0
+                        + PADDING, rw_w/2 - PADDING * 2, rw_h/2 - PADDING * 2);
                         break;
                     case UP_LEFT:
-                        XMoveResizeWindow(dpy, order.window, 0, 0,
-                                rw_w/2, rw_h/2);
+                        XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
+                        PADDING, rw_w/2 - PADDING * 2, rw_h/2 - PADDING * 2);
                         break;
                     case DOWN_LEFT:
-                        XMoveResizeWindow(dpy, order.window, 0, rw_h/2,
-                                rw_w/2, rw_h/2);
+                        XMoveResizeWindow(dpy, order.window, 0 + PADDING, rw_h/2
+                        + PADDING, rw_w/2 - PADDING * 2, rw_h/2 - PADDING * 2);
                         break;
                     case DOWN_RIGHT:
-                        XMoveResizeWindow(dpy, order.window, rw_w/2, rw_h/2,
-                                rw_w/2, rw_h/2);
+                        XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING,
+                        rw_h/2 + PADDING, rw_w/2 - PADDING * 2, rw_h/2 -
+                        PADDING * 2);
                         break;
                 }
             }
