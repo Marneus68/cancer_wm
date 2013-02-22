@@ -80,6 +80,7 @@ int main()
 
     /* launch the defautl applications */
     GRAB_KEYS(XK_t, CANCER_MOD)
+    GRAB_KEYS(XK_f, CANCER_MOD)
 
     /* move the window arround */
     XGrabButton(dpy, 1, CANCER_MOD, root, True, ButtonPressMask, GrabModeAsync,
@@ -106,6 +107,8 @@ int main()
                 {
                     if (KEY_IS(XK_t))
                         order.act = DEF_TERM;
+                    else if (KEY_IS(XK_f))
+                        order.act = DEF_WWW;
                 }
             }
             else if (ev.xkey.subwindow != None)
@@ -207,74 +210,72 @@ int main()
         }
         else if (ev.type == KeyRelease)
         {
-            int toclean = 1;
-
-            if (order.act == 0) toclean = 0;
-            else if (order.act == DESTROY)
+            if (order.act != 0) 
             {
-                XUnmapWindow(dpy, order.window);
-                XDestroyWindow(dpy, order.window);
-            }
-            else if (order.act == LOWER)
-                XLowerWindow(dpy, order.window);
-            else if (order.act == RAISE)
-                XRaiseWindow(dpy, order.window); 
-            else if (order.act == REFRESH)
-            {
-                XUnmapWindow(dpy, order.window);
-                XMapWindow(dpy, order.window);
-            }
-            else if (order.act == DEF_TERM)
-                system("x-terminal-emulator &");
-            else if (order.act == DEF_WWW)
-                system("x-www-browser");
-            else if (order.act == SNAP)
-            {
-                XRaiseWindow(dpy, ev.xbutton.subwindow);
-                switch (order.direct)
+                if (order.act == DESTROY)
                 {
-                    case FULLSCREEN:
-                        XMoveResizeWindow(dpy, order.window, 0, 0,
-                            rw_w, rw_h);
-                        break;
-                    case UP:
-                        XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
-                        PADDING, rw_w - PADDING * 2, rw_h/2 - PADDING * 2);
-                        break;
-                    case DOWN:
-                        XMoveResizeWindow(dpy, order.window, 0 + PADDING, rw_h/2
-                        + PADDING, rw_w - PADDING * 2, rw_h/2 - PADDING * 2);
-                        break;
-                    case RIGHT:
-                        XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING, 0
-                        + PADDING, rw_w/2 - PADDING  * 2, rw_h - PADDING * 2);
-                        break;
-                    case LEFT:
-                        XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
-                        PADDING, rw_w/2 - PADDING * 2, rw_h - PADDING * 2);
-                        break;
-                    case UP_RIGHT:
-                        XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING, 0
-                        + PADDING, rw_w/2 - PADDING * 2, rw_h/2 - PADDING * 2);
-                        break;
-                    case UP_LEFT:
-                        XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
-                        PADDING, rw_w/2 - PADDING * 2, rw_h/2 - PADDING * 2);
-                        break;
-                    case DOWN_LEFT:
-                        XMoveResizeWindow(dpy, order.window, 0 + PADDING, rw_h/2
-                        + PADDING, rw_w/2 - PADDING * 2, rw_h/2 - PADDING * 2);
-                        break;
-                    case DOWN_RIGHT:
-                        XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING,
-                        rw_h/2 + PADDING, rw_w/2 - PADDING * 2, rw_h/2 -
-                        PADDING * 2);
-                        break;
+                    XUnmapWindow(dpy, order.window);
+                    XDestroyWindow(dpy, order.window);
                 }
-            }
+                else if (order.act == LOWER)
+                    XLowerWindow(dpy, order.window);
+                else if (order.act == RAISE)
+                    XRaiseWindow(dpy, order.window); 
+                else if (order.act == REFRESH)
+                {
+                    XUnmapWindow(dpy, order.window);
+                    XMapWindow(dpy, order.window);
+                }
+                else if (order.act == DEF_TERM)
+                    system("x-terminal-emulator &");
+                else if (order.act == DEF_WWW)
+                    system("x-www-browser &");
+                else if (order.act == SNAP)
+                {
+                    XRaiseWindow(dpy, ev.xbutton.subwindow);
+                    switch (order.direct)
+                    {
+                        case FULLSCREEN:
+                            XMoveResizeWindow(dpy, order.window, 0, 0,
+                                rw_w, rw_h);
+                            break;
+                        case UP:
+                            XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
+                            PADDING, rw_w - PADDING * 2, rw_h/2 - PADDING );
+                            break;
+                        case DOWN:
+                            XMoveResizeWindow(dpy, order.window, 0 + PADDING, rw_h/2
+                            + PADDING, rw_w - PADDING * 2, rw_h/2 - PADDING * 2);
+                            break;
+                        case RIGHT:
+                            XMoveResizeWindow(dpy, order.window, rw_w/2 +
+                            PADDING, 0 + PADDING, rw_w/2 - PADDING * 2
+                            , rw_h - PADDING * 2);
+                            break;
+                        case LEFT:
+                            XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
+                            PADDING, rw_w/2 - PADDING, rw_h - PADDING * 2);
+                            break;
+                        case UP_RIGHT:
+                            XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING, 0
+                            + PADDING, rw_w/2 - PADDING * 2, rw_h/2 - PADDING);
+                            break;
+                        case UP_LEFT:
+                            XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
+                            PADDING, rw_w/2 - PADDING, rw_h/2 - PADDING);
+                            break;
+                        case DOWN_LEFT:
+                            XMoveResizeWindow(dpy, order.window, 0 + PADDING, rw_h/2
+                            + PADDING, rw_w/2 - PADDING, rw_h/2 - PADDING * 2);
+                            break;
+                        case DOWN_RIGHT:
+                            XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING,
+                            rw_h/2 + PADDING, rw_w/2 - PADDING * 2, rw_h/2 -
+                            PADDING * 2);
+                            break;
+                    }
+                }
             
-            if (toclean)
-            {
                 order.act = 0;
                 order.direct = 0;
                 order.arg = 0;
