@@ -1,11 +1,27 @@
+TARGET  := $(shell basename $$PWD)
+WARN    := -pedantic -Wall
+OFLAGS  := -Os
 PREFIX?=/usr/X11R6
-CFLAGS?=-Os -pedantic -Wall
+CDLAGS  := -I$(PREFIX)/include ${OFLAGS} ${WARN}
+LDFLAGS := -L$(PREFIX)/lib -lX11
+CC      := gcc
 
-all:
-	$(CC) $(CFLAGS) -I$(PREFIX)/include cancer_wm.c -L$(PREFIX)/lib -lX11 -o cancer_wm 
+C_SRCS      = $(wildcard *.c)
+OBJ_FILES   = $(C_SRCS:.c=.o)
+
+%o: %c
+	$(CC) -c $(CFLAGS) $< -o $@
+
+$(TARGET): $(OBJ_FILES)
+	$(CC) -o $@ $(OBJ_FILES) $(LDFLAGS)
+
+all: ${TARGET}
 
 clean:
-	rm -f cancer_wm
+	rm -rf *.o
+
+mrproper: clean
+	rm ${TARGET}
 
 install:
 	install -Dm755 cancer_wm-session /usr/bin/cancer_wm-session

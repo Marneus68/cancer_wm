@@ -5,6 +5,7 @@
 
 #include "constants.h"
 #include "cancer_wm.h"
+#include "window_fun.h"
 
 int main()
 {
@@ -28,8 +29,7 @@ int main()
     
     /* root window size */
     unsigned int    rw_w = attr.width,
-                    rw_h = attr.height;
-    
+                    rw_h = attr.height; 
     ca_order    order;
     order.window = NULL;
 
@@ -233,47 +233,50 @@ int main()
                 else if (order.act == SNAP)
                 {
                     XRaiseWindow(dpy, ev.xbutton.subwindow);
-                    switch (order.direct)
-                    {
-                        case FULLSCREEN:
-                            XMoveResizeWindow(dpy, order.window, 0, 0,
-                                rw_w, rw_h);
-                            break;
-                        case UP:
-                            XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
-                            PADDING, rw_w - PADDING * 2, rw_h/2 - PADDING );
-                            break;
-                        case DOWN:
-                            XMoveResizeWindow(dpy, order.window, 0 + PADDING, rw_h/2
-                            + PADDING, rw_w - PADDING * 2, rw_h/2 - PADDING * 2);
-                            break;
-                        case RIGHT:
-                            XMoveResizeWindow(dpy, order.window, rw_w/2 +
-                            PADDING, 0 + PADDING, rw_w/2 - PADDING * 2
-                            , rw_h - PADDING * 2);
-                            break;
-                        case LEFT:
-                            XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
-                            PADDING, rw_w/2 - PADDING, rw_h - PADDING * 2);
-                            break;
-                        case UP_RIGHT:
-                            XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING, 0
-                            + PADDING, rw_w/2 - PADDING * 2, rw_h/2 - PADDING);
-                            break;
-                        case UP_LEFT:
-                            XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
-                            PADDING, rw_w/2 - PADDING, rw_h/2 - PADDING);
-                            break;
-                        case DOWN_LEFT:
-                            XMoveResizeWindow(dpy, order.window, 0 + PADDING, rw_h/2
-                            + PADDING, rw_w/2 - PADDING, rw_h/2 - PADDING * 2);
-                            break;
-                        case DOWN_RIGHT:
-                            XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING,
-                            rw_h/2 + PADDING, rw_w/2 - PADDING * 2, rw_h/2 -
-                            PADDING * 2);
-                            break;
-                    }
+                    CMoveWindowTo(dpy, &order.window, rw_w, rw_h, order.direct);
+                    //switch (order.direct)
+                    //{
+                    //    case FULLSCREEN:
+                    //        CMoveWindowTo(dpy, &order.window, rw_w, rw_h,
+                    //        FULLSCREEN);
+                    //        //XMoveResizeWindow(dpy, order.window, 0, 0,
+                    //        //    rw_w, rw_h);
+                    //        break;
+                    //    case UP:
+                    //        XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
+                    //        PADDING, rw_w - PADDING * 2, rw_h/2 - PADDING );
+                    //        break;
+                    //    case DOWN:
+                    //        XMoveResizeWindow(dpy, order.window, 0 + PADDING, rw_h/2
+                    //        + PADDING, rw_w - PADDING * 2, rw_h/2 - PADDING * 2);
+                    //        break;
+                    //    case RIGHT:
+                    //        XMoveResizeWindow(dpy, order.window, rw_w/2 +
+                    //        PADDING, 0 + PADDING, rw_w/2 - PADDING * 2
+                    //        , rw_h - PADDING * 2);
+                    //        break;
+                    //    case LEFT:
+                    //        XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
+                    //        PADDING, rw_w/2 - PADDING, rw_h - PADDING * 2);
+                    //        break;
+                    //    case UP_RIGHT:
+                    //        XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING, 0
+                    //        + PADDING, rw_w/2 - PADDING * 2, rw_h/2 - PADDING);
+                    //        break;
+                    //    case UP_LEFT:
+                    //        XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
+                    //        PADDING, rw_w/2 - PADDING, rw_h/2 - PADDING);
+                    //        break;
+                    //    case DOWN_LEFT:
+                    //        XMoveResizeWindow(dpy, order.window, 0 + PADDING, rw_h/2
+                    //        + PADDING, rw_w/2 - PADDING, rw_h/2 - PADDING * 2);
+                    //        break;
+                    //    case DOWN_RIGHT:
+                    //        XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING,
+                    //        rw_h/2 + PADDING, rw_w/2 - PADDING * 2, rw_h/2 -
+                    //        PADDING * 2);
+                    //        break;
+                    //}
                 }
             
                 order.act = 0;
@@ -296,7 +299,8 @@ int main()
                 start = ev.xbutton;
             }
         }
-        else if(ev.type == MotionNotify) {
+        else if(ev.type == MotionNotify)
+        {
             int xdiff, ydiff;
             
             while(XCheckTypedEvent(dpy, MotionNotify, &ev));
@@ -313,6 +317,30 @@ int main()
         {
             if (ev.xbutton.state == Button1Mask || Button3Mask)
                 XUngrabPointer(dpy, CurrentTime);
+            if (start.button == 1)
+            {
+                if (ev.xbutton.y_root < 30 && ev.xbutton.x_root < 30)
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP_LEFT);
+                else if (ev.xbutton.y_root < 30 && ev.xbutton.x_root > rw_w -
+                            30)
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP_RIGHT);
+                else if (ev.xbutton.y_root > rw_h - 30 && ev.xbutton.x_root <
+                            30)
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h,
+                            DOWN_LEFT);
+                else if (ev.xbutton.y_root > rw_h - 30 && ev.xbutton.x_root > rw_w -
+                            30)
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h,
+                            DOWN_RIGHT);
+                else if (ev.xbutton.y_root > rw_h - 30)
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, DOWN);
+                else if (ev.xbutton.y_root < 30)
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP);
+                else if (ev.xbutton.x_root < 30)
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, LEFT);
+                else if (ev.xbutton.x_root > rw_w - 30)
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, RIGHT);
+            }
         }
     }
 }
