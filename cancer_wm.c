@@ -1,7 +1,7 @@
 /* cancer_wm is written by Duane Bekaert, 2013.
  * this work is based on :
  * TinyWM is written by Nick Welch <mack@incise.org>, 2005.
- */
+*/
 
 #include "constants.h"
 #include "cancer_wm.h"
@@ -25,10 +25,13 @@ int main()
     XGetWindowAttributes(dpy, root, &attr);
     
     /* root window size */
-    unsigned int    rw_w = attr.width,
-                    rw_h = attr.height; 
+    unsigned int rw_w;
+    unsigned int rw_h;
+
+    rw_w = attr.width;
+    rw_h = attr.height; 
+
     ca_order    order;
-    ca_final_direction  dock_pos = UP;
     order.window = NULL;
 
     /* put the window on the top */
@@ -231,8 +234,7 @@ int main()
                 else if (order.act == SNAP)
                 {
                     XRaiseWindow(dpy, ev.xbutton.subwindow);
-                    CMoveWindowTo(dpy, &order.window, rw_w, rw_h, order.direct,
-                    dock_pos);
+                    CMoveWindowTo(dpy, &order.window, rw_w, rw_h, order.direct);
                 }
             
                 order.act = 0;
@@ -276,32 +278,27 @@ int main()
             if (start.button == 1)
             {
                 if (ev.xbutton.y_root < 30 && ev.xbutton.x_root < 30)
-                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP_LEFT,
-                            dock_pos);
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP_LEFT);
                 else if (ev.xbutton.y_root < 30 && ev.xbutton.x_root > rw_w -
                             30)
-                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP_RIGHT,
-                            dock_pos);
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, 
+                            UP_RIGHT);
                 else if (ev.xbutton.y_root > rw_h - 30 && ev.xbutton.x_root <
                             30)
                     CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h,
-                            DOWN_LEFT, dock_pos);
+                            DOWN_LEFT);
                 else if (ev.xbutton.y_root > rw_h - 30 && ev.xbutton.x_root > rw_w -
                             30)
                     CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h,
-                            DOWN_RIGHT, dock_pos);
+                            DOWN_RIGHT);
                 else if (ev.xbutton.y_root > rw_h - 30)
-                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, DOWN,
-                            dock_pos);
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, DOWN);
                 else if (ev.xbutton.y_root < 30)
-                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP,
-                            dock_pos);
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP);
                 else if (ev.xbutton.x_root < 30)
-                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, LEFT,
-                            dock_pos);
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, LEFT);
                 else if (ev.xbutton.x_root > rw_w - 30)
-                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, RIGHT,
-                            dock_pos);
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, RIGHT);
             }
         }
     }

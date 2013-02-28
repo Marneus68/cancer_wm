@@ -3,10 +3,12 @@
 #include "constants.h"
 
 int CMoveWindowTo(Display * e_dpy, Window * e_w, unsigned int e_rw_w,
-        unsigned int e_rw_h, ca_final_direction e_dir, ca_final_direction
-        e_dock_pos)
+        unsigned int e_rw_h, ca_final_direction e_dir)
 {
     int ret = 0;
+
+    e_rw_h -= DOCK_SIZE;
+
     switch (e_dir)
     {
         case FULLSCREEN:
@@ -15,37 +17,44 @@ int CMoveWindowTo(Display * e_dpy, Window * e_w, unsigned int e_rw_w,
             break;
         case UP:
             XMoveResizeWindow(e_dpy, *e_w, 0 + PADDING, 0 +
-                    PADDING, e_rw_w - PADDING * 2, e_rw_h/2 - PADDING );
+                    PADDING + DOCK_SIZE, e_rw_w - PADDING * 2,
+                    e_rw_h/2 - PADDING);
             break;
         case DOWN:
             XMoveResizeWindow(e_dpy, *e_w, 0 + PADDING, e_rw_h/2
-                    + PADDING, e_rw_w - PADDING * 2, e_rw_h/2 - PADDING * 2);
+                    + PADDING + DOCK_SIZE, e_rw_w - PADDING * 2, 
+                    e_rw_h/2 - PADDING * 2);
             break;
         case RIGHT:
             XMoveResizeWindow(e_dpy, *e_w, e_rw_w/2 +
-                    PADDING, 0 + PADDING, e_rw_w/2 - PADDING * 2
+                    PADDING, 0 + PADDING + DOCK_SIZE, e_rw_w/2 - PADDING * 2
                     , e_rw_h - PADDING * 2);
             break;
         case LEFT:
             XMoveResizeWindow(e_dpy, *e_w, 0 + PADDING, 0 +
-                    PADDING, e_rw_w/2 - PADDING, e_rw_h - PADDING * 2);
+                    PADDING + DOCK_SIZE, e_rw_w/2 - PADDING, 
+                    e_rw_h - PADDING * 2);
             break;
         case UP_RIGHT:
             XMoveResizeWindow(e_dpy, *e_w, e_rw_w/2 + PADDING, 0
-                    + PADDING, e_rw_w/2 - PADDING * 2, e_rw_h/2 - PADDING);
+                    + PADDING + DOCK_SIZE, e_rw_w/2 - PADDING * 2, 
+                    e_rw_h/2 - PADDING);
             break;
         case UP_LEFT:
             XMoveResizeWindow(e_dpy, *e_w, 0 + PADDING, 0 +
-                    PADDING, e_rw_w/2 - PADDING, e_rw_h/2 - PADDING);
+                    PADDING + DOCK_SIZE, e_rw_w/2 - PADDING, 
+                    e_rw_h/2 - PADDING);
             break;
         case DOWN_LEFT:
             XMoveResizeWindow(e_dpy, *e_w, 0 + PADDING, e_rw_h/2
-                    + PADDING, e_rw_w/2 - PADDING, e_rw_h/2 - PADDING * 2);
+                    + PADDING + DOCK_SIZE, e_rw_w/2 - PADDING, 
+                    e_rw_h/2 - PADDING * 2);
             break;
         case DOWN_RIGHT:
             XMoveResizeWindow(e_dpy, *e_w, e_rw_w/2 + PADDING,
-                    e_rw_h/2 + PADDING, e_rw_w/2 - PADDING * 2, e_rw_h/2 -
-            PADDING * 2);
+                    e_rw_h/2 + PADDING + DOCK_SIZE, 
+                    e_rw_w/2 - PADDING * 2, e_rw_h/2 -
+                    PADDING * 2);
             break;
         default:
             /* just to get rid of the "not handled value in switch" warning */
