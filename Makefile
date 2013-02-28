@@ -1,7 +1,7 @@
 TARGET  := $(shell basename $$PWD)
 WARN    := -pedantic -Wall
 OFLAGS  := -Os
-PREFIX?=/usr/X11R6
+PREFIX  :=/usr/X11R6
 CDLAGS  := -I$(PREFIX)/include ${OFLAGS} ${WARN}
 LDFLAGS := -L$(PREFIX)/lib -lX11
 CC      := gcc
@@ -10,14 +10,18 @@ C_SRCS      = $(wildcard *.c)
 OBJ_FILES   = $(C_SRCS:.c=.o)
 
 %o: %c
-	$(CC) -c $(CFLAGS) $< -o $@
+	@echo "Compiling "$<"..."
+	$(CC) -c $(CFLAGS) $(WARN) $< -o $@
 
 $(TARGET): $(OBJ_FILES)
+	@echo "Linking "$<"..."
 	$(CC) -o $@ $(OBJ_FILES) $(LDFLAGS)
 
 all: ${TARGET}
+	@echo "Done."
 
 clean:
+	@echo "Cleaning..."
 	rm -rf *.o
 
 mrproper: clean

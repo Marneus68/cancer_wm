@@ -13,9 +13,6 @@ int main()
     Window root;
     XWindowAttributes attr;
 
-    /* we use this to save the pointer's state at the beginning of the
-     * move/resize.
-     */
     XButtonEvent start;
 
     XEvent ev;
@@ -31,6 +28,7 @@ int main()
     unsigned int    rw_w = attr.width,
                     rw_h = attr.height; 
     ca_order    order;
+    ca_final_direction  dock_pos = UP;
     order.window = NULL;
 
     /* put the window on the top */
@@ -233,50 +231,8 @@ int main()
                 else if (order.act == SNAP)
                 {
                     XRaiseWindow(dpy, ev.xbutton.subwindow);
-                    CMoveWindowTo(dpy, &order.window, rw_w, rw_h, order.direct);
-                    //switch (order.direct)
-                    //{
-                    //    case FULLSCREEN:
-                    //        CMoveWindowTo(dpy, &order.window, rw_w, rw_h,
-                    //        FULLSCREEN);
-                    //        //XMoveResizeWindow(dpy, order.window, 0, 0,
-                    //        //    rw_w, rw_h);
-                    //        break;
-                    //    case UP:
-                    //        XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
-                    //        PADDING, rw_w - PADDING * 2, rw_h/2 - PADDING );
-                    //        break;
-                    //    case DOWN:
-                    //        XMoveResizeWindow(dpy, order.window, 0 + PADDING, rw_h/2
-                    //        + PADDING, rw_w - PADDING * 2, rw_h/2 - PADDING * 2);
-                    //        break;
-                    //    case RIGHT:
-                    //        XMoveResizeWindow(dpy, order.window, rw_w/2 +
-                    //        PADDING, 0 + PADDING, rw_w/2 - PADDING * 2
-                    //        , rw_h - PADDING * 2);
-                    //        break;
-                    //    case LEFT:
-                    //        XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
-                    //        PADDING, rw_w/2 - PADDING, rw_h - PADDING * 2);
-                    //        break;
-                    //    case UP_RIGHT:
-                    //        XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING, 0
-                    //        + PADDING, rw_w/2 - PADDING * 2, rw_h/2 - PADDING);
-                    //        break;
-                    //    case UP_LEFT:
-                    //        XMoveResizeWindow(dpy, order.window, 0 + PADDING, 0 +
-                    //        PADDING, rw_w/2 - PADDING, rw_h/2 - PADDING);
-                    //        break;
-                    //    case DOWN_LEFT:
-                    //        XMoveResizeWindow(dpy, order.window, 0 + PADDING, rw_h/2
-                    //        + PADDING, rw_w/2 - PADDING, rw_h/2 - PADDING * 2);
-                    //        break;
-                    //    case DOWN_RIGHT:
-                    //        XMoveResizeWindow(dpy, order.window, rw_w/2 + PADDING,
-                    //        rw_h/2 + PADDING, rw_w/2 - PADDING * 2, rw_h/2 -
-                    //        PADDING * 2);
-                    //        break;
-                    //}
+                    CMoveWindowTo(dpy, &order.window, rw_w, rw_h, order.direct,
+                    dock_pos);
                 }
             
                 order.act = 0;
@@ -320,26 +276,32 @@ int main()
             if (start.button == 1)
             {
                 if (ev.xbutton.y_root < 30 && ev.xbutton.x_root < 30)
-                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP_LEFT);
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP_LEFT,
+                            dock_pos);
                 else if (ev.xbutton.y_root < 30 && ev.xbutton.x_root > rw_w -
                             30)
-                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP_RIGHT);
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP_RIGHT,
+                            dock_pos);
                 else if (ev.xbutton.y_root > rw_h - 30 && ev.xbutton.x_root <
                             30)
                     CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h,
-                            DOWN_LEFT);
+                            DOWN_LEFT, dock_pos);
                 else if (ev.xbutton.y_root > rw_h - 30 && ev.xbutton.x_root > rw_w -
                             30)
                     CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h,
-                            DOWN_RIGHT);
+                            DOWN_RIGHT, dock_pos);
                 else if (ev.xbutton.y_root > rw_h - 30)
-                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, DOWN);
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, DOWN,
+                            dock_pos);
                 else if (ev.xbutton.y_root < 30)
-                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP);
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, UP,
+                            dock_pos);
                 else if (ev.xbutton.x_root < 30)
-                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, LEFT);
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, LEFT,
+                            dock_pos);
                 else if (ev.xbutton.x_root > rw_w - 30)
-                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, RIGHT);
+                    CMoveWindowTo(dpy, &ev.xbutton.window, rw_w, rw_h, RIGHT,
+                            dock_pos);
             }
         }
     }

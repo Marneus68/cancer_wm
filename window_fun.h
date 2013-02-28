@@ -4,7 +4,8 @@
 #include "cancer_wm.h"
 
 int CMoveWindowTo(Display * e_dpy, Window * e_w, unsigned int e_rw_w,
-unsigned int e_rw_h, ca_final_direction e_dir);
+        unsigned int e_rw_h, ca_final_direction e_dir, ca_final_direction
+        e_dock_pos);
 
 #endif /* __CANCER_WINDOW_FUN_H__ */
 
