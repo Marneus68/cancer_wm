@@ -1,7 +1,7 @@
 #ifndef __CANCER_WM_H__
 #define __CANCER_WM_H__
 
-#include <unistd.h>
+#include <stdlib.h>
 
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
@@ -21,7 +21,8 @@ typedef enum
     SNAP, 
     FREE,
     DEF_TERM,
-    DEF_WWW
+    DEF_WWW,
+    KILL_CLIENT
 } ca_action;
 
 typedef enum 

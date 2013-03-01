@@ -18,15 +18,16 @@ int main()
     XEvent ev;
 
     /* return failure status if we can't connect */
-    if(!(dpy = XOpenDisplay(0x0))) return 1;
+    if(!(dpy = XOpenDisplay(0x0))) return EXIT_FAILURE;
 
     root = DefaultRootWindow(dpy);
 
     XGetWindowAttributes(dpy, root, &attr);
     
+    unsigned int    alive = 1,
     /* root window size */
-    unsigned int rw_w;
-    unsigned int rw_h;
+                    rw_w,
+                    rw_h; 
 
     rw_w = attr.width;
     rw_h = attr.height; 
@@ -83,6 +84,9 @@ int main()
     GRAB_KEYS(XK_t, CANCER_MOD)
     GRAB_KEYS(XK_f, CANCER_MOD)
 
+    /* kill the X client */
+    GRAB_KEYS(XK_Delete, CTRL_ALT)
+
     /* move the window arround */
     XGrabButton(dpy, 1, CANCER_MOD, root, True, ButtonPressMask, GrabModeAsync,
             GrabModeAsync, None, None);
@@ -95,11 +99,11 @@ int main()
     XGrabButton(dpy, 2, CANCER_MOD, root, True, ButtonPressMask, GrabModeAsync,
             GrabModeAsync, None, None);
 
-    for(;;)
+    while(alive)
     {
         XNextEvent(dpy, &ev);
         
-        /*** Keypresses on a window ***/
+        /*** Keypresses anywhere ***/
         if(ev.type == KeyPress)
         {
             if (ev.xkey.subwindow == None)
@@ -110,8 +114,11 @@ int main()
                         order.act = DEF_TERM;
                     else if (KEY_IS(XK_f))
                         order.act = DEF_WWW;
+                    else if (KEY_IS(XK_Delete))
+                        alive = 0;
                 }
             }
+            /*** Keypresses on a window ***/
             else if (ev.xkey.subwindow != None)
             {
                 order.window = ev.xkey.subwindow;
@@ -302,5 +309,8 @@ int main()
             }
         }
     }
+    XCloseDisplay(dpy);
+    
+    return EXIT_SUCCESS;
 }
 
