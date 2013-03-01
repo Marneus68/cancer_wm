@@ -69,6 +69,7 @@ Ctrl + Mod1 + Mouse Button 1: Move the clicked window around
 Ctrl + Mod1 + Mouse Button 3: Resize the clicked window  
 
 Ctrl + Mod1 + t: Bring up your default terminal emulator (x-terminal-emulator)
+Ctrl + Mod1 + f: Bring up your default web browser
 
 Ctrl + Mod1 + Up:  
 Ctrl + Mod1 + 8:  
@@ -94,6 +95,8 @@ Ctrl + Mod1 + j + l: Snap to the bottom right slot
 Ctrl + Mod1 + Down + Left:  
 Ctrl + Mod1 + 1:  
 Ctrl + Mod1 + j + h: Snap to the bottom left slot  
+
+Ctrl + Mod1 + Del: Close cancer_wm
 
 Uninstalling
 ------------
